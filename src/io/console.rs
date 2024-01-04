@@ -1,6 +1,13 @@
-use crate::{board::Board, board::Square, PieceColour, PieceType, UnitResult};
+use std::io::{self, stdin, Write};
 
-/// Renders the came through a text cli
+use crate::{
+    board::Board,
+    board::{coordinate_to_index, Square},
+    io::Command,
+    PieceColour, PieceType, UnitResult,
+};
+
+/// Renders the game through a text cli
 pub struct ConsoleRenderer {}
 
 impl ConsoleRenderer {
@@ -14,7 +21,10 @@ impl ConsoleRenderer {
         for rank in 0..8 {
             print!("{} ", 8 - rank);
             for file in 0..8 {
-                print!("| {} ", self.piece_to_char(&board.squares[rank * 8 + file]));
+                print!(
+                    "| {} ",
+                    self.piece_to_char(&board.squares[coordinate_to_index(file, rank)])
+                );
             }
             println!("|");
             println!("  +---+---+---+---+---+---+---+---+");
@@ -43,5 +53,20 @@ impl ConsoleRenderer {
             },
             None => ' ',
         }
+    }
+
+    pub fn get_command(&self) -> Result<Command, String> {
+        print!(">> ");
+        io::stdout().flush().map_err(|err| err.to_string())?;
+        let mut buffer = String::new();
+
+        stdin()
+            .read_line(&mut buffer)
+            .map_err(|err| err.to_string())?;
+
+        // todo make lower
+        let cmd: Vec<&str> = buffer.strip_suffix("\r\n").unwrap().split(" ").collect();
+
+        Ok(Command::from(cmd))
     }
 }

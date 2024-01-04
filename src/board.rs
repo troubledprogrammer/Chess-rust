@@ -1,3 +1,4 @@
+use crate::io::Command;
 use crate::piece::pawn::Pawn;
 use crate::piece::Piece;
 use crate::{PieceColour, UnitResult, STARTING_FEN};
@@ -5,6 +6,14 @@ use crate::{PieceColour, UnitResult, STARTING_FEN};
 use arr_macro::arr;
 
 pub type Square = Option<Box<dyn Piece>>;
+
+pub fn coordinate_to_index(file: u8, rank: u8) -> usize {
+    (file + rank * 8) as usize
+}
+
+pub fn index_to_coordinate(index: usize) -> (u8, u8) {
+    ((index % 8) as u8, (index / 8) as u8)
+}
 
 pub struct Board {
     pub squares: [Square; 64],
@@ -40,8 +49,7 @@ impl Board {
                         ind += chr.to_digit(10).unwrap() as usize;
                     } else if chr.is_alphabetic() {
                         let is_white = !chr.is_lowercase();
-                        let file = (ind % 8) as u8;
-                        let rank = (ind / 8) as u8;
+                        let (file, rank) = index_to_coordinate(ind);
                         squares[ind] = match chr.to_lowercase().to_string().as_str() {
                             "p" => Some(Box::new(Pawn::new(is_white, file, rank))),
                             _ => {
@@ -79,11 +87,8 @@ impl Board {
         Ok(Self { squares, turn })
     }
 
-    pub fn update(&mut self, command: String) -> UnitResult {
-        println!(
-            "Updated with instruction: {}",
-            &command[..command.len() - 1]
-        );
+    pub fn update(&mut self, command: Command) -> UnitResult {
+        println!("Updated with instruction: {:?}", command);
 
         Ok(())
     }

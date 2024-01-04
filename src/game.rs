@@ -1,46 +1,44 @@
 use crate::board::Board;
-use crate::render::console::ConsoleRenderer;
+use crate::io::console::ConsoleRenderer;
+use crate::io::Command;
 use crate::UnitResult;
-
-use std::io::stdin;
 
 pub struct Game {
     pub board: Board,
-    pub renderer: ConsoleRenderer,
-    pub is_running: bool,
+    pub io: ConsoleRenderer,
+    is_running: bool,
 }
 
 impl Game {
     pub fn new() -> Result<Self, String> {
         Ok(Self {
             board: Board::new()?,
-            renderer: ConsoleRenderer::new(),
+            io: ConsoleRenderer::new(),
             is_running: true,
         })
     }
 
     pub fn run(&mut self) -> UnitResult {
-        self.render()?;
-
         while self.is_running {
-            self.update()?;
             self.render()?;
+            self.update()?;
         }
 
         Ok(())
     }
 
     fn render(&self) -> UnitResult {
-        self.renderer.render(&self.board)
+        self.io.render(&self.board)
     }
 
     fn update(&mut self) -> UnitResult {
-        let mut buffer = String::new();
-
-        stdin()
-            .read_line(&mut buffer)
-            .map_err(|err| err.to_string())?;
-
-        self.board.update(buffer)
+        match self.io.get_command()? {
+            Command::None => Ok(()),
+            Command::Quit => {
+                self.is_running = false;
+                Ok(())
+            }
+            cmd => self.board.update(cmd),
+        }
     }
 }
