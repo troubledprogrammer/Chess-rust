@@ -1,4 +1,7 @@
+use crate::{board::Board, UnitResult};
+
 pub mod console;
+pub mod window;
 
 #[derive(Debug)]
 pub enum Command {
@@ -27,4 +30,9 @@ impl From<Vec<&str>> for Command {
             Self::None
         }
     }
+}
+
+pub trait IO {
+    fn get_command(&mut self) -> Result<Command, String>;
+    fn render(&mut self, board: &Board) -> UnitResult;
 }

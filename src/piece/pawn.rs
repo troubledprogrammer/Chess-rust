@@ -4,7 +4,7 @@ use crate::{
     PieceColour, PieceType,
 };
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Pawn {
     colour: PieceColour,
     file: u8,

@@ -1,5 +1,7 @@
 pub mod pawn;
 
+use std::fmt::Debug;
+
 use crate::{board::Board, PieceColour, PieceType};
 
 pub trait Piece {
@@ -19,4 +21,10 @@ pub trait Piece {
 
     /// gets type of piece
     fn piece_type(&self) -> PieceType;
+}
+
+impl Debug for dyn Piece {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Piece{{{:?}, {:?}}}", self.colour(), self.piece_type())
+    }
 }

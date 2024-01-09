@@ -7,10 +7,12 @@ use arr_macro::arr;
 
 pub type Square = Option<Box<dyn Piece>>;
 
+/// converts a (file, rank) pair to an index
 pub fn coordinate_to_index(file: u8, rank: u8) -> usize {
     (file + rank * 8) as usize
 }
 
+/// converts an index to a (file, rank) pair
 pub fn index_to_coordinate(index: usize) -> (u8, u8) {
     ((index % 8) as u8, (index / 8) as u8)
 }

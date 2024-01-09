@@ -3,36 +3,16 @@ use std::io::{self, stdin, Write};
 use crate::{
     board::Board,
     board::{coordinate_to_index, Square},
-    io::Command,
+    io::{Command, IO},
     PieceColour, PieceType, UnitResult,
 };
 
 /// Renders the game through a text cli
-pub struct ConsoleRenderer {}
+pub struct ConsoleRenderer;
 
 impl ConsoleRenderer {
-    pub fn new() -> Self {
-        Self {}
-    }
-
-    pub fn render(&self, board: &Board) -> UnitResult {
-        println!("    a   b   c   d   e   f   g   h  ");
-        println!("  +---+---+---+---+---+---+---+---+");
-        for rank in 0..8 {
-            print!("{} ", 8 - rank);
-            for file in 0..8 {
-                print!(
-                    "| {} ",
-                    self.piece_to_char(&board.squares[coordinate_to_index(file, rank)])
-                );
-            }
-            println!("|");
-            println!("  +---+---+---+---+---+---+---+---+");
-        }
-
-        println!("{:?}'s turn", &board.turn);
-
-        Ok(())
+    pub fn new() -> Result<Self, String> {
+        Ok(Self {})
     }
 
     fn piece_to_char(&self, piece_option: &Square) -> char {
@@ -54,8 +34,10 @@ impl ConsoleRenderer {
             None => ' ',
         }
     }
+}
 
-    pub fn get_command(&self) -> Result<Command, String> {
+impl IO for ConsoleRenderer {
+    fn get_command(&mut self) -> Result<Command, String> {
         print!(">> ");
         io::stdout().flush().map_err(|err| err.to_string())?;
         let mut buffer = String::new();
@@ -68,5 +50,25 @@ impl ConsoleRenderer {
         let cmd: Vec<&str> = buffer.strip_suffix("\r\n").unwrap().split(" ").collect();
 
         Ok(Command::from(cmd))
+    }
+
+    fn render(&mut self, board: &Board) -> UnitResult {
+        println!("    a   b   c   d   e   f   g   h  ");
+        println!("  +---+---+---+---+---+---+---+---+");
+        for rank in 0..8 {
+            print!("{} ", 8 - rank);
+            for file in 0..8 {
+                print!(
+                    "| {} ",
+                    self.piece_to_char(&board.squares[coordinate_to_index(file, rank)])
+                );
+            }
+            println!("|");
+            println!("  +---+---+---+---+---+---+---+---+");
+        }
+
+        println!("{:?}'s turn", &board.turn);
+
+        Ok(())
     }
 }

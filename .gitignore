@@ -4,7 +4,3 @@
 /.vscode
 Cargo.lock
 
-# wip SDL2 rendering
-SDL2.dll
-/assets
-/src/io/window.rs

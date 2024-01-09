@@ -1,11 +1,12 @@
 use crate::board::Board;
-use crate::io::console::ConsoleRenderer;
-use crate::io::Command;
+// use crate::io::console::ConsoleRenderer;
+use crate::io::window::WindowRenderer;
+use crate::io::{Command, IO};
 use crate::UnitResult;
 
 pub struct Game {
     pub board: Board,
-    pub io: ConsoleRenderer,
+    pub io: Box<dyn IO>,
     is_running: bool,
 }
 
@@ -13,7 +14,7 @@ impl Game {
     pub fn new() -> Result<Self, String> {
         Ok(Self {
             board: Board::new()?,
-            io: ConsoleRenderer::new(),
+            io: Box::new(WindowRenderer::new()?),
             is_running: true,
         })
     }
@@ -27,7 +28,7 @@ impl Game {
         Ok(())
     }
 
-    fn render(&self) -> UnitResult {
+    fn render(&mut self) -> UnitResult {
         self.io.render(&self.board)
     }
 

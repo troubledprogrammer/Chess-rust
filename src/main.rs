@@ -1,4 +1,4 @@
-#![allow(dead_code, unused_variables, unused_mut)]
+#![allow(dead_code, unused_variables, unused_mut, unused_imports)]
 
 use std::result;
 
@@ -13,7 +13,7 @@ type UnitResult = result::Result<(), String>;
 
 const STARTING_FEN: &str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PieceType {
     KING,
     QUEEN,
@@ -23,10 +23,25 @@ pub enum PieceType {
     PAWN,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+impl PieceType {
+    const PIECES: [Self; 6] = [
+        Self::KING,
+        Self::QUEEN,
+        Self::ROOK,
+        Self::BISHOP,
+        Self::KNIGHT,
+        Self::PAWN,
+    ];
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PieceColour {
     WHITE,
     BLACK,
+}
+
+impl PieceColour {
+    const COLOURS: [Self; 2] = [Self::WHITE, Self::BLACK];
 }
 
 fn main() -> UnitResult {
