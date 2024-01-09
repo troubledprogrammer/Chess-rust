@@ -1,20 +1,18 @@
 use crate::board::Board;
-// use crate::io::console::ConsoleRenderer;
-use crate::io::window::WindowRenderer;
 use crate::io::{Command, IO};
 use crate::{UnitResult, STARTING_FEN};
 
-pub struct Game {
+pub struct Game<T: IO> {
     pub board: Board,
-    pub io: Box<dyn IO>,
+    pub io: T,
     is_running: bool,
 }
 
-impl Game {
-    pub fn new() -> Result<Self, String> {
+impl<T: IO> Game<T> {
+    pub fn new(io: T) -> Result<Self, String> {
         Ok(Self {
             board: Board::from_fen(STARTING_FEN)?,
-            io: Box::new(WindowRenderer::new()?),
+            io: io,
             is_running: true,
         })
     }

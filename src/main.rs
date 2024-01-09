@@ -3,6 +3,7 @@
 use std::{ops::Not, result};
 
 use game::Game;
+use io::{console::ConsoleRenderer, window::WindowRenderer};
 
 mod board;
 mod game;
@@ -56,7 +57,8 @@ impl Not for PieceColour {
 }
 
 fn main() -> UnitResult {
-    let mut game = Game::new()?;
+    let renderer = WindowRenderer::new()?;
+    let mut game = Game::new(renderer)?;
 
     game.run()
 }
