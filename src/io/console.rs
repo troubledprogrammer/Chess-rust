@@ -37,7 +37,7 @@ impl ConsoleRenderer {
 }
 
 impl IO for ConsoleRenderer {
-    fn get_command(&mut self) -> Result<Command, String> {
+    fn get_command(&mut self, board: &Board) -> Result<Command, String> {
         print!(">> ");
         io::stdout().flush().map_err(|err| err.to_string())?;
         let mut buffer = String::new();

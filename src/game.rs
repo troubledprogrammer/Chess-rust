@@ -33,7 +33,7 @@ impl Game {
     }
 
     fn update(&mut self) -> UnitResult {
-        match self.io.get_command()? {
+        match self.io.get_command(&self.board)? {
             Command::None => Ok(()),
             Command::Quit => {
                 self.is_running = false;

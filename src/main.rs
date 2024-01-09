@@ -1,6 +1,6 @@
 #![allow(dead_code, unused_variables, unused_mut, unused_imports)]
 
-use std::result;
+use std::{ops::Not, result};
 
 use game::Game;
 
@@ -43,6 +43,16 @@ pub enum PieceColour {
 
 impl PieceColour {
     const COLOURS: [Self; 2] = [Self::WHITE, Self::BLACK];
+}
+
+impl Not for PieceColour {
+    type Output = Self;
+    fn not(self) -> Self {
+        match self {
+            PieceColour::WHITE => PieceColour::BLACK,
+            PieceColour::BLACK => PieceColour::WHITE,
+        }
+    }
 }
 
 fn main() -> UnitResult {

@@ -84,8 +84,31 @@ impl Board {
     }
 
     pub fn update(&mut self, command: Command) -> UnitResult {
-        println!("Updated with instruction: {:?}", command);
-
+        match command {
+            Command::Move {
+                start_file,
+                start_rank,
+                end_file,
+                end_rank,
+            } => self.make_move(start_file, start_rank, end_file, end_rank),
+            _ => (),
+        }
         Ok(())
+    }
+
+    fn make_move(&mut self, start_file: u8, start_rank: u8, end_file: u8, end_rank: u8) {
+        if let Some(mut piece) = self.squares[coordinate_to_index(start_file, start_rank)].take() {
+            if piece.is_pseudo_legal(end_file, end_rank, self) {
+                piece.update_pos(end_file, end_rank);
+                self.turn = !self.turn;
+                self.squares[coordinate_to_index(end_file, end_rank)] = Some(piece);
+                println!("{:?}'s turn", self.turn);
+            } else {
+                println!("Cannot make move: invalid move");
+                self.squares[coordinate_to_index(start_file, start_rank)] = Some(piece);
+            }
+        } else {
+            println!("Cannot make move: piece doesn't exist");
+        }
     }
 }

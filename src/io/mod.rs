@@ -33,6 +33,6 @@ impl From<Vec<&str>> for Command {
 }
 
 pub trait IO {
-    fn get_command(&mut self) -> Result<Command, String>;
+    fn get_command(&mut self, board: &Board) -> Result<Command, String>;
     fn render(&mut self, board: &Board) -> UnitResult;
 }

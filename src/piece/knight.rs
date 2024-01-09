@@ -27,9 +27,11 @@ impl Piece for Knight {
         }
     }
 
-    fn is_pseudo_legal(&self, new_file: u8, new_rank: u8, board: Board) -> bool {
-        if let Some(_) = board.squares[coordinate_to_index(new_file, new_rank)] {
-            return false;
+    fn is_pseudo_legal(&self, new_file: u8, new_rank: u8, board: &Board) -> bool {
+        if let Some(piece) = &board.squares[coordinate_to_index(new_file, new_rank)] {
+            if piece.colour() == self.colour {
+                return false;
+            }
         }
 
         let diff = (new_file.abs_diff(self.file), new_rank.abs_diff(self.rank));
@@ -62,19 +64,19 @@ mod tests {
     #[test]
     fn test1() {
         let k = Knight::new(true, 0, 0);
-        let b = Board::from_fen(EMPTY_FEN).unwrap();
+        let b = &Board::from_fen(EMPTY_FEN).unwrap();
         assert!(k.is_pseudo_legal(2, 1, b))
     }
     #[test]
     fn test2() {
         let k = Knight::new(false, 7, 7);
-        let b = Board::from_fen(EMPTY_FEN).unwrap();
+        let b = &Board::from_fen(EMPTY_FEN).unwrap();
         assert!(!k.is_pseudo_legal(5, 5, b))
     }
     #[test]
     fn test3() {
         let k = Knight::new(true, 2, 4);
-        let b = Board::from_fen(EMPTY_FEN).unwrap();
+        let b = &Board::from_fen(EMPTY_FEN).unwrap();
         assert!(k.is_pseudo_legal(3, 2, b))
     }
 }
