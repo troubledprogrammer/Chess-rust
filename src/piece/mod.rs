@@ -1,4 +1,7 @@
-pub mod pawn;
+mod knight;
+mod pawn;
+pub use knight::Knight;
+pub use pawn::Pawn;
 
 use std::fmt::Debug;
 
@@ -10,7 +13,8 @@ pub trait Piece {
     where
         Self: Sized;
 
-    /// checks if a given square can be moved to
+    /// checks if a given square can be moved to.
+    /// assumes that bounds have been checked and it is the correct colour's turn
     fn is_pseudo_legal(&self, new_file: u8, new_rank: u8, board: Board) -> bool;
 
     /// updates the piece's position

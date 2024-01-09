@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use raylib::prelude::*;
 
-use crate::board::{self, index_to_coordinate, Board, Square};
+use crate::board::{index_to_coordinate, Board};
 use crate::io::{Command, IO};
 use crate::{PieceColour, PieceType, UnitResult};
 

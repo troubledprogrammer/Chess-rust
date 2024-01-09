@@ -1,7 +1,6 @@
 use crate::io::Command;
-use crate::piece::pawn::Pawn;
-use crate::piece::Piece;
-use crate::{PieceColour, UnitResult, STARTING_FEN};
+use crate::piece::{Knight, Pawn, Piece};
+use crate::{PieceColour, UnitResult};
 
 use arr_macro::arr;
 
@@ -23,21 +22,14 @@ pub struct Board {
 }
 
 impl Board {
-    pub fn new() -> Result<Self, String> {
-        Board::from_fen(Some("8/pppppppp/pp4pp/PpPp3P/8/8/PPPPPPPP/8 b KQkq - 0 1"))
-    }
-
-    fn from_fen(fen: Option<&str>) -> Result<Self, String> {
-        let mut f: Vec<String> = match fen {
-            Some(s) => s,
-            None => STARTING_FEN,
-        }
-        .chars()
-        .rev()
-        .collect::<String>()
-        .split(" ")
-        .map(|s| s.to_owned())
-        .collect();
+    pub fn from_fen(fen: &str) -> Result<Self, String> {
+        let mut f: Vec<_> = fen
+            .chars()
+            .rev()
+            .collect::<String>()
+            .split(" ")
+            .map(|s| s.to_owned())
+            .collect();
 
         // position
         let mut squares: [Square; 64] = arr![None; 64];
@@ -54,12 +46,14 @@ impl Board {
                         let (file, rank) = index_to_coordinate(ind);
                         squares[ind] = match chr.to_lowercase().to_string().as_str() {
                             "p" => Some(Box::new(Pawn::new(is_white, file, rank))),
-                            _ => {
-                                return Err(format!(
-                                    "Invalid fen: cannot parse char '{}' as a piece",
-                                    chr
-                                ))
-                            }
+                            "n" => Some(Box::new(Knight::new(is_white, file, rank))),
+                            _ => None,
+                            // _ => {
+                            //     return Err(format!(
+                            //         "Invalid fen: cannot parse char '{}' as a piece",
+                            //         chr
+                            //     ))
+                            // }
                         };
                         ind += 1;
                     }

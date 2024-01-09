@@ -2,7 +2,7 @@ use crate::board::Board;
 // use crate::io::console::ConsoleRenderer;
 use crate::io::window::WindowRenderer;
 use crate::io::{Command, IO};
-use crate::UnitResult;
+use crate::{UnitResult, STARTING_FEN};
 
 pub struct Game {
     pub board: Board,
@@ -13,7 +13,7 @@ pub struct Game {
 impl Game {
     pub fn new() -> Result<Self, String> {
         Ok(Self {
-            board: Board::new()?,
+            board: Board::from_fen(STARTING_FEN)?,
             io: Box::new(WindowRenderer::new()?),
             is_running: true,
         })
