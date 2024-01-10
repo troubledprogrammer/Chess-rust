@@ -8,12 +8,3 @@ edition = "2021"
 [dependencies]
 arr_macro = "0.2.1"
 raylib = "3.7.0"
-
-# [env]
-# SFML_INCLUDE_DIR = "C:/Users/Miles/OneDrive/Documents/Coding/rust/libs/SFML-2.6.1/include"
-# SFML_LIBS_DIR = "C:/Users/Miles/OneDrive/Documents/Coding/rust/libs/SFML-2.6.1/libs"
-
-# [dependencies.sdl2]
-# version = "0.36.0"
-# default-features = false
-# features = ["image"]

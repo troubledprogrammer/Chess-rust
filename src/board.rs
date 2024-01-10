@@ -1,5 +1,5 @@
 use crate::io::Command;
-use crate::piece::{Knight, Pawn, Piece};
+use crate::piece::{Bishop, King, Knight, Pawn, Piece, Queen, Rook};
 use crate::{PieceColour, UnitResult};
 
 use arr_macro::arr;
@@ -47,6 +47,10 @@ impl Board {
                         squares[ind] = match chr.to_lowercase().to_string().as_str() {
                             "p" => Some(Box::new(Pawn::new(is_white, file, rank))),
                             "n" => Some(Box::new(Knight::new(is_white, file, rank))),
+                            "b" => Some(Box::new(Bishop::new(is_white, file, rank))),
+                            "r" => Some(Box::new(Rook::new(is_white, file, rank))),
+                            "q" => Some(Box::new(Queen::new(is_white, file, rank))),
+                            "k" => Some(Box::new(King::new(is_white, file, rank))),
                             _ => None,
                             // _ => {
                             //     return Err(format!(

@@ -5,13 +5,13 @@ use crate::{
 };
 
 #[derive(Clone, Copy, Debug)]
-pub struct Knight {
+pub struct Rook {
     colour: PieceColour,
     file: u8,
     rank: u8,
 }
 
-impl Piece for Knight {
+impl Piece for Rook {
     fn new(is_white: bool, file: u8, rank: u8) -> Self
     where
         Self: Sized,
@@ -34,13 +34,45 @@ impl Piece for Knight {
             }
         }
 
-        let diff = (new_file.abs_diff(self.file), new_rank.abs_diff(self.rank));
+        let file_diff = new_file.abs_diff(self.file);
+        let rank_diff = new_rank.abs_diff(self.rank);
 
-        if diff == (2, 1) || diff == (1, 2) {
-            return true;
+        if file_diff != 0 && rank_diff != 0 {
+            return false;
         }
 
-        false
+        let file_dir = if file_diff == 0 {
+            0
+        } else {
+            match new_file > self.file {
+                true => 1,
+                false => -1,
+            }
+        };
+        let rank_dir = if rank_diff == 0 {
+            0
+        } else {
+            match new_rank > self.rank {
+                true => 1,
+                false => -1,
+            }
+        };
+
+        let mut checking_file = new_file as i32 - file_dir;
+        let mut checking_rank = new_rank as i32 - rank_dir;
+
+        while checking_file != self.file as i32 {
+            if let Some(_) =
+                board.squares[coordinate_to_index(checking_file as u8, checking_rank as u8)]
+            {
+                return false;
+            }
+
+            checking_file -= file_dir;
+            checking_rank -= rank_dir;
+        }
+
+        true
     }
 
     fn update_pos(&mut self, new_file: u8, new_rank: u8) {
@@ -53,7 +85,7 @@ impl Piece for Knight {
     }
 
     fn piece_type(&self) -> PieceType {
-        PieceType::KNIGHT
+        PieceType::ROOK
     }
 }
 
@@ -63,20 +95,20 @@ mod tests {
     use crate::EMPTY_FEN;
     #[test]
     fn test1() {
-        let k = Knight::new(true, 0, 0);
+        let k = Rook::new(true, 0, 0);
         let b = &Board::from_fen(EMPTY_FEN).unwrap();
-        assert!(k.is_pseudo_legal(2, 1, b))
+        assert!(k.is_pseudo_legal(2, 0, b))
     }
     #[test]
     fn test2() {
-        let k = Knight::new(false, 7, 7);
+        let k = Rook::new(false, 7, 7);
         let b = &Board::from_fen(EMPTY_FEN).unwrap();
-        assert!(!k.is_pseudo_legal(5, 5, b))
+        assert!(!k.is_pseudo_legal(5, 4, b))
     }
     #[test]
     fn test3() {
-        let k = Knight::new(true, 2, 4);
+        let k = Rook::new(true, 2, 4);
         let b = &Board::from_fen(EMPTY_FEN).unwrap();
-        assert!(k.is_pseudo_legal(3, 2, b))
+        assert!(k.is_pseudo_legal(3, 4, b))
     }
 }

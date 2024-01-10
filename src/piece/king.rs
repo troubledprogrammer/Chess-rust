@@ -5,13 +5,13 @@ use crate::{
 };
 
 #[derive(Clone, Copy, Debug)]
-pub struct Knight {
+pub struct King {
     colour: PieceColour,
     file: u8,
     rank: u8,
 }
 
-impl Piece for Knight {
+impl Piece for King {
     fn new(is_white: bool, file: u8, rank: u8) -> Self
     where
         Self: Sized,
@@ -34,9 +34,10 @@ impl Piece for Knight {
             }
         }
 
-        let diff = (new_file.abs_diff(self.file), new_rank.abs_diff(self.rank));
+        let file_diff = new_file.abs_diff(self.file);
+        let rank_diff = new_rank.abs_diff(self.rank);
 
-        if diff == (2, 1) || diff == (1, 2) {
+        if file_diff <= 1 && rank_diff <= 1 && file_diff + rank_diff != 0 {
             return true;
         }
 
@@ -53,7 +54,7 @@ impl Piece for Knight {
     }
 
     fn piece_type(&self) -> PieceType {
-        PieceType::KNIGHT
+        PieceType::KING
     }
 }
 
@@ -63,20 +64,20 @@ mod tests {
     use crate::EMPTY_FEN;
     #[test]
     fn test1() {
-        let k = Knight::new(true, 0, 0);
+        let k = King::new(true, 0, 0);
         let b = &Board::from_fen(EMPTY_FEN).unwrap();
-        assert!(k.is_pseudo_legal(2, 1, b))
+        assert!(k.is_pseudo_legal(1, 1, b))
     }
     #[test]
     fn test2() {
-        let k = Knight::new(false, 7, 7);
+        let k = King::new(false, 7, 7);
         let b = &Board::from_fen(EMPTY_FEN).unwrap();
-        assert!(!k.is_pseudo_legal(5, 5, b))
+        assert!(!k.is_pseudo_legal(7, 7, b))
     }
     #[test]
     fn test3() {
-        let k = Knight::new(true, 2, 4);
+        let k = King::new(true, 2, 4);
         let b = &Board::from_fen(EMPTY_FEN).unwrap();
-        assert!(k.is_pseudo_legal(3, 2, b))
+        assert!(k.is_pseudo_legal(3, 3, b))
     }
 }

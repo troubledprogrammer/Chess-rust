@@ -89,7 +89,7 @@ impl Piece for Pawn {
         self.colour
     }
 
-    fn piece_type(&self) -> crate::PieceType {
+    fn piece_type(&self) -> PieceType {
         PieceType::PAWN
     }
 }
