@@ -96,6 +96,7 @@ impl IO for WindowRenderer {
                     start_rank: selected_rank,
                     end_file: file,
                     end_rank: rank,
+                    promotion_piece: Some(PieceType::QUEEN), // TODO
                 });
             } else {
                 self.selected_square = None;

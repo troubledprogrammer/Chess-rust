@@ -1,4 +1,4 @@
-use crate::{board::Board, UnitResult};
+use crate::{board::Board, PieceType, UnitResult};
 
 pub mod console;
 pub mod window;
@@ -11,6 +11,7 @@ pub enum Command {
         start_rank: u8,
         end_file: u8,
         end_rank: u8,
+        promotion_piece: Option<PieceType>,
     },
     Quit,
 }
@@ -23,6 +24,7 @@ impl From<Vec<&str>> for Command {
                 start_rank: 1,
                 end_file: 1,
                 end_rank: 1,
+                promotion_piece: None,
             }
         } else if value.len() == 1 && value[0] == "quit" {
             Self::Quit

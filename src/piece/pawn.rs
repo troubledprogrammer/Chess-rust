@@ -70,10 +70,16 @@ impl Piece for Pawn {
                 }
             }
         }
+
         // capture
         if new_file.abs_diff(self.file) == 1 && new_rank.abs_diff(self.rank) == 1 {
             if let Some(piece) = &board.squares[coordinate_to_index(new_file, new_rank)] {
                 return piece.colour() != self.colour;
+            }
+
+            // en passant
+            if let Some(_) = board.en_passant_ind {
+                return true;
             }
         };
 
